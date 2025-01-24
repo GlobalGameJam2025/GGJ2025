@@ -49,38 +49,103 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         _moveInput = value.Get<Vector2>();
-        Debug.Log($"Move Input: {_moveInput}");
+        //Debug.Log($"Move Input: {_moveInput}");
+
+   
 
         if (_moveInput.x ==1 && _moveInput.y ==0)
         {
             _target.GetComponent<SpriteRenderer>().flipX = false;
             _animator.SetBool("Move_D", true);
+
+            _animator.SetBool("Move_W", false);
+            _animator.SetBool("Move_WS", false);
+            _animator.SetBool("Move_DS", false);
+            _animator.SetBool("Move_S", false);
         }
         else if (_moveInput.x == -1 && _moveInput.y == 0)
         {
             _target.GetComponent<SpriteRenderer>().flipX = true;
             _animator.SetBool("Move_D", true);
+
+            _animator.SetBool("Move_W", false);
+            _animator.SetBool("Move_WS", false);
+            _animator.SetBool("Move_DS", false);
+            _animator.SetBool("Move_S", false);
         }
         else if (_moveInput.x == 0 && _moveInput.y == 1)
         {
             _animator.SetBool("Move_W", true);
+
+            _animator.SetBool("Move_WS", false);
+            _animator.SetBool("Move_D", false);
+            _animator.SetBool("Move_DS", false);
+            _animator.SetBool("Move_S", false);
+        }
+        else if (_moveInput.x >0 && _moveInput.y > 0)
+        {
+            _target.GetComponent<SpriteRenderer>().flipX = false;
+            _animator.SetBool("Move_WS", true);
+
+            _animator.SetBool("Move_W", false);
+            _animator.SetBool("Move_D", false);
+            _animator.SetBool("Move_DS", false);
+            _animator.SetBool("Move_S", false);
+        }
+        else if (_moveInput.x < 0 && _moveInput.y > 0)
+        {
+            _target.GetComponent<SpriteRenderer>().flipX = true;
+            _animator.SetBool("Move_WS", true);
+
+            _animator.SetBool("Move_W", false);
+ 
+            _animator.SetBool("Move_D", false);
+            _animator.SetBool("Move_DS", false);
+            _animator.SetBool("Move_S", false);
         }
         else if (_moveInput.x > 0 && _moveInput.y < 0)
         {
             _target.GetComponent<SpriteRenderer>().flipX = false;
             _animator.SetBool("Move_DS", true);
+
+            _animator.SetBool("Move_W", false);
+            _animator.SetBool("Move_WS", false);
+            _animator.SetBool("Move_D", false);
+            _animator.SetBool("Move_S", false);
         }
         else if (_moveInput.x < 0 && _moveInput.y < 0)
         {
             _target.GetComponent<SpriteRenderer>().flipX = true;
             _animator.SetBool("Move_DS", true);
+
+                _animator.SetBool("Move_W", false);
+                _animator.SetBool("Move_WS", false);
+                _animator.SetBool("Move_D", false);
+               
+                _animator.SetBool("Move_S", false);
         }
         else if (_moveInput.x == 0 && _moveInput.y == 0)
         {
             _animator.SetBool("Move_W", false);
+            _animator.SetBool("Move_WS", false);
             _animator.SetBool("Move_D", false);
             _animator.SetBool("Move_DS", false);
+            _animator.SetBool("Move_S", true);
         }
+
+        //var currentStateInfo = _animator.GetCurrentAnimatorStateInfo(0); // 0은 기본 레이어
+        //int currentStateHash = currentStateInfo.shortNameHash;
+
+        ////현재 상태의 이름 확인
+        //Debug.Log($"Current State Hash: {currentStateHash}");
+
+        //if (currentStateHash == Animator.StringToHash("temp"))
+        //{
+        //    Debug.Log("qweqew");
+        //    _animator.SetBool("Move_W", false);
+        //    _animator.SetBool("Move_D", false);
+        //    _animator.SetBool("Move_DS", false);
+        //}
     }
 
     public void OnDodge(InputValue value)
@@ -137,6 +202,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+   
+
+
+
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
             return;
 
