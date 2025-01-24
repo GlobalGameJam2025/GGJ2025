@@ -15,16 +15,12 @@ public class NormalBubble : Bubble
             // 8방향으로 발사
             for (int i = 0; i < 8; i++)
             {
-                // 각도를 45도 단위로 나누어 계산
                 float angle = i * 45f;
-
-                // 각도를 벡터 방향으로 변환 (2D 기준)
                 Vector2 direction = new Vector2(
-                    Mathf.Cos(angle * Mathf.Deg2Rad),  // X 방향
-                    Mathf.Sin(angle * Mathf.Deg2Rad)   // Y 방향
+                    Mathf.Cos(angle * Mathf.Deg2Rad),
+                    Mathf.Sin(angle * Mathf.Deg2Rad)
                 );
 
-                // 자식 버블을 해당 방향으로 발사
                 _childBubbles[i].gameObject.SetActive(true);
                 LaunchBubble(_childBubbles[i], direction);
             }
