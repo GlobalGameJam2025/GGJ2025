@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator _animator;
     [SerializeField]
-    private GameObject _mousePointer;
+    private Transform _mousePointer;
+    [SerializeField]
+    private GameObject _normalBubble;
     [SerializeField]
     private List<GameObject> _staminaBar;
     private int _staminaindex = 2;
@@ -27,26 +29,36 @@ public class PlayerController : MonoBehaviour
     private float _dodgeDuration = 0.2f;
     float _dodgeSpped = 1;
 
+
+    public float decelerationRate = 0.1f; // 감속 비율
+    public float minSpeed = 0.1f;      // 최소 속도
+
+    private float currentSpeed = 10;        // 현재 속도
+    private Vector3 direction;         // 초기 발사 방향
+
     private void Start()
     {
         _animator.SetBool("Move_S", true);
+        // 초기 속도 설정
+
         StartCoroutine(RecoverStamina());
+
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log($"{other.gameObject.name} has entered the 2D trigger!");
-    }
+    //void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    Debug.Log($"{other.gameObject.name} has entered the 2D trigger!");
+    //}
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        Debug.Log($"{other.gameObject.name} is staying in the 2D trigger!");
-    }
+    //private void OnTriggerStay2D(Collider2D other)
+    //{
+    //    Debug.Log($"{other.gameObject.name} is staying in the 2D trigger!");
+    //}
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        Debug.Log($"{other.gameObject.name} has exited the 2D trigger!");
-    }
+    //private void OnTriggerExit2D(Collider2D other)
+    //{
+    //    Debug.Log($"{other.gameObject.name} has exited the 2D trigger!");
+    //}
 
     public void OnMove(InputValue value)
     {
@@ -155,10 +167,21 @@ public class PlayerController : MonoBehaviour
         {
             _staminaBar[_staminaindex].SetActive(false);
             _staminaindex--;
-            //_sppedRate = 2f; // 버튼을 눌렀을 때 속도 증가
             StartCoroutine(Dodge());
 
-            //StartCoroutine
+        }
+    }
+
+    private GameObject tempGameObject;
+
+    public void OnFire(InputValue value)
+    {
+        if (value.isPressed )
+        {
+            direction = (_mousePointer.position - transform.position).normalized;
+            tempGameObject = Instantiate(_normalBubble,_target.position,Quaternion.identity);
+            tempGameObject.GetComponent<Projectile>().direction = direction;
+            tempGameObject.GetComponent<Projectile>().isfire = true;
         }
     }
 
@@ -201,10 +224,10 @@ public class PlayerController : MonoBehaviour
         _uiElement.GetComponent<Image>().fillAmount -= damage;
     }
 
+    float elapsedTime = 0;
+
     private void Update()
     {
-
-
 
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
             return;
@@ -219,6 +242,26 @@ public class PlayerController : MonoBehaviour
         Vector3 worldPosition = _target.position + _offset ;
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
         _uiElement.position = screenPosition;
+
+
+        //if(tempGameObject != null)
+        //{
+        //    // 지수적으로 감속
+        //    currentSpeed = 20 * Mathf.Exp(-1 * Time.time);
+
+        //    // 속도가 0 이하로 떨어지면 멈춤
+        //    if (currentSpeed <= 0f)
+        //    {
+        //        currentSpeed = 0f;
+        //        Debug.Log("Projectile stopped.");
+        //        return;
+        //    }
+
+        //    // 방향으로 이동
+        //    tempGameObject.transform.position += direction * currentSpeed * Time.deltaTime;
+        //}
+
+       
     }
 
 }
