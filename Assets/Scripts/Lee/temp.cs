@@ -1,28 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class temp : MonoBehaviour
 {
-    private Vector2 moveInput;
-
-    public void OnMove(InputValue value)
+    private void Start()
     {
-        moveInput = value.Get<Vector2>();
-        //Debug.Log($"Move Input: {moveInput}");
+        Debug.Log(234);
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log(123213);
+        Debug.Log($"{other.gameObject.name} has entered the 2D trigger!");
     }
 
-    public void OnDodge(InputValue value)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log(value);
-        if (value.isPressed)
-        {
-            Debug.Log("Jump!");
-        }
+        Debug.Log($"{other.gameObject.name} is staying in the 2D trigger!");
     }
 
-    private void Update()
+    private void OnTriggerExit2D(Collider2D other)
     {
-        // 예: moveInput 값을 사용해 캐릭터 이동 처리
-        transform.Translate(new Vector3(moveInput.x, moveInput.y) * Time.deltaTime * 5f);
+        Debug.Log($"{other.gameObject.name} has exited the 2D trigger!");
     }
 }
