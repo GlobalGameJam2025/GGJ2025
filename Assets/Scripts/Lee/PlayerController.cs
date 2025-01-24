@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,9 +17,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveInput;
     [Header("회피 설정")]
     [SerializeField]
-    private float _dodgeSppedRate = 1;
+    private float _dodgeSppedRate = 3;
     [SerializeField]
     private float _dodgeDuration = 0.2f;
+    float _dodgeSpped = 1;
 
     private void Start()
     {
@@ -26,6 +28,20 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(RecoverStamina());
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log($"{other.gameObject.name} has entered the 2D trigger!");
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        Debug.Log($"{other.gameObject.name} is staying in the 2D trigger!");
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        Debug.Log($"{other.gameObject.name} has exited the 2D trigger!");
+    }
 
     public void OnMove(InputValue value)
     {
@@ -54,22 +70,13 @@ public class PlayerController : MonoBehaviour
         // 회피하는 동안 빠르게 이동
         while (elapsedTime < _dodgeDuration)
         {
-            _dodgeSppedRate = 3;
+            _dodgeSpped = _dodgeSppedRate;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        _dodgeSppedRate = 1;
+        _dodgeSpped = 1;
 
-        //if(_staminaindex < _staminaBar.Count - 1)
-        //{
-        //    yield return new WaitForSeconds(3f); // 3초 대기
-        //    _staminaindex++;
-        //    _staminaBar[_staminaindex].SetActive(true); // 스태미나 회복
-        //    Debug.Log($"Stamina Recovered: {_staminaindex + 1}");
-        //}
     }
-
-
 
     private IEnumerator RecoverStamina()
     {
@@ -89,10 +96,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void SetHp(float damage)
+    {
+        _uiElement.GetComponent<Image>().fillAmount -= damage;
+    }
+
     private void Update()
     {
+        if (_uiElement.GetComponent<Image>().fillAmount <= 0)
+            return;
+
         // 예: moveInput 값을 사용해 캐릭터 이동 처리
-        transform.Translate(new Vector3(_moveInput.x, _moveInput.y) * _dodgeSppedRate * Time.deltaTime * 5f);
+        transform.Translate(new Vector3(_moveInput.x, _moveInput.y) * _dodgeSpped * Time.deltaTime * 5f);
 
 
         // 월드 좌표를 화면 좌표로 변환
@@ -100,5 +115,6 @@ public class PlayerController : MonoBehaviour
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
         _uiElement.position = screenPosition;
     }
+
 }
 
