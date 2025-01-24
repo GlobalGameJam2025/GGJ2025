@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -9,9 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform _target; 
     [SerializeField]
-    private RectTransform _uiElement; 
+    private RectTransform _uiElement;
     [SerializeField]
-    private List<GameObject> _staminaBar; 
+    private Animator _animator; 
+    [SerializeField]
+    private List<GameObject> _staminaBar;
     private int _staminaindex = 2;
     private Vector3 _offset = new Vector3(0, 1, 0);
     private Vector2 _moveInput;
@@ -46,7 +49,38 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         _moveInput = value.Get<Vector2>();
-        //Debug.Log($"Move Input: {moveInput}");
+        Debug.Log($"Move Input: {_moveInput}");
+
+        if (_moveInput.x ==1 && _moveInput.y ==0)
+        {
+            _target.GetComponent<SpriteRenderer>().flipX = false;
+            _animator.SetBool("Move_D", true);
+        }
+        else if (_moveInput.x == -1 && _moveInput.y == 0)
+        {
+            _target.GetComponent<SpriteRenderer>().flipX = true;
+            _animator.SetBool("Move_D", true);
+        }
+        else if (_moveInput.x == 0 && _moveInput.y == 1)
+        {
+            _animator.SetBool("Move_W", true);
+        }
+        else if (_moveInput.x > 0 && _moveInput.y < 0)
+        {
+            _target.GetComponent<SpriteRenderer>().flipX = false;
+            _animator.SetBool("Move_DS", true);
+        }
+        else if (_moveInput.x < 0 && _moveInput.y < 0)
+        {
+            _target.GetComponent<SpriteRenderer>().flipX = true;
+            _animator.SetBool("Move_DS", true);
+        }
+        else if (_moveInput.x == 0 && _moveInput.y == 0)
+        {
+            _animator.SetBool("Move_W", false);
+            _animator.SetBool("Move_D", false);
+            _animator.SetBool("Move_DS", false);
+        }
     }
 
     public void OnDodge(InputValue value)
