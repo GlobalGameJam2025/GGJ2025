@@ -5,43 +5,53 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField]
-    private float _highSpeed =20;
-    private float _exp = 1;
-    public float _currentSpeed;
-    [HideInInspector]
-    public Vector3 direction;
-    [HideInInspector]
-    public bool isfire;
-    private float elapsedTime = 0f;
+    private float _projectileSpeed = 20;
+    private float _currentSpeed;
+    private Vector3 _direction;
+    private bool _isfire;
+    private bool _isStop;
+    private float _elapsedTime = 0f;
+    private float _stopTime = 0f;
 
-    public void Init()
+    public void Init(Vector3 direction ,Vector3 InitPos)
     {
-        _exp = 1;
-        isfire = false;   
+        _isfire = true;
+        _isStop = false;
+        _stopTime = 0f;
+        _elapsedTime = 0f;
+        this._direction = direction; 
+        gameObject.SetActive(true);
+        transform.position = InitPos;   
     }
    
 
     private void Update()
     {
-        if (isfire)
+        if (_isfire)
         {
-            // 경과 시간 업데이트
-            elapsedTime += Time.deltaTime;
+            _elapsedTime += Time.deltaTime;
+            _currentSpeed = _projectileSpeed * Mathf.Exp(-3 * _elapsedTime);
 
-            // 지수적으로 감속 (elapsedTime을 사용)
-            _currentSpeed = _highSpeed * Mathf.Exp(-3 * elapsedTime);
-            //Debug.Log(_currentSpeed);
-
-            // 속도가 0 이하로 떨어지면 멈춤
             if (_currentSpeed <= 0.1f)
             {
                 _currentSpeed = 0f;
-                Debug.Log("Projectile stopped.");
-                return;
+                _isfire = false;
+                _isStop = true;
+            }
+            transform.position += _direction * _currentSpeed * Time.deltaTime;
+        }
+
+        if(_isStop)
+        {
+            _stopTime += Time.deltaTime;
+
+            if(_stopTime >1)
+            {
+                _isStop = false;
+                _elapsedTime = 0f;
+                gameObject.SetActive(false);
             }
 
-            // 방향으로 이동
-            this.transform.position += direction * _currentSpeed * Time.deltaTime;
         }
     }
 
