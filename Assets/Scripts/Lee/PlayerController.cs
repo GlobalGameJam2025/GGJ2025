@@ -12,7 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private RectTransform _uiElement;
     [SerializeField]
-    private Animator _animator; 
+    private Animator _animator;
+    [SerializeField]
+    private GameObject _mousePointer;
     [SerializeField]
     private List<GameObject> _staminaBar;
     private int _staminaindex = 2;
@@ -27,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-
+        _animator.SetBool("Move_S", true);
         StartCoroutine(RecoverStamina());
     }
 
@@ -50,7 +52,6 @@ public class PlayerController : MonoBehaviour
     {
         _moveInput = value.Get<Vector2>();
         //Debug.Log($"Move Input: {_moveInput}");
-
    
 
         if (_moveInput.x ==1 && _moveInput.y ==0)
@@ -202,13 +203,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-   
 
 
 
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
             return;
 
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _mousePointer.transform.position = new Vector3(worldPos.x, worldPos.y, -1);
         // 예: moveInput 값을 사용해 캐릭터 이동 처리
         transform.Translate(new Vector3(_moveInput.x, _moveInput.y) * _dodgeSpped * Time.deltaTime * 5f);
 
