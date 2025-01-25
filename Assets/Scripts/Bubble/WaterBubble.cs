@@ -19,10 +19,16 @@ public class WaterBubble : Bubble
     protected override void TriggerPlayer()
     {
         base.TriggerPlayer();
-        if (bombCount >= 5)
+        if (_defenseIcon.activeSelf)
         {
             _playerController.waterDefense.SetActive(true);
+            gameObject.SetActive(false);
         }
-        gameObject.SetActive(false);
+    }
+
+    protected override void SetExplosion(bool isExplosion = false)
+    {
+        if (isExplosion) return;
+        if (bombCount >= 5) gameObject.SetActive(false);
     }
 }

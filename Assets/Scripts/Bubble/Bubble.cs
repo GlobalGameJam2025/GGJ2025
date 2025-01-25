@@ -31,19 +31,26 @@ public abstract class Bubble : MonoBehaviour
 
     protected virtual void TriggerBubble()
     {
+        if (bombCount >= 5) return;
         bombCount++;
         gameObject.transform.localScale *= 1.2f;
     }
 
     protected virtual void TriggerPlayer()
     {
-        if (!_isHead) return;
+        if (_isHead) return;
         gameObject.SetActive(false);
     }
 
     protected virtual void TriggerBoss()
     {
         gameObject.SetActive(false);
+    }
+
+    protected virtual void SetExplosion(bool isExplosion = true)
+    {
+        if (isExplosion) return;
+        if (bombCount >= 5) gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -55,7 +62,8 @@ public abstract class Bubble : MonoBehaviour
                 gameObject.SetActive(false);
             }
             TriggerBubble();
-            if (bombCount >= 5) gameObject.SetActive(false);
+            SetExplosion();
+            
         }
 
         if (collision.CompareTag("Player"))

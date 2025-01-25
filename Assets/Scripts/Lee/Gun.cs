@@ -31,7 +31,7 @@ public class Gun : MonoBehaviour
             transform.position += direction * _projectileSpeed * Time.deltaTime;
 
             // 탄알이 목표를 바라보도록 회전
-            transform.rotation = Quaternion.LookRotation(direction);
+            //transform.rotation = Quaternion.LookRotation(direction);
 
         }
     }

@@ -26,7 +26,6 @@ public class KnightIdleState : IBossState
     public void Update()
     {
         _elpasTime += Time.deltaTime;
-        Debug.Log(_elpasTime);
 
         if (_elpasTime > 3)
         {
