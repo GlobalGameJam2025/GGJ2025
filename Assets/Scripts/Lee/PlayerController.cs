@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform _mousePointer;
     [SerializeField]
-    private GameObject _normalBubble;
-    [SerializeField]
     private List<GameObject> _staminaBar;
 
     [Header("회피 설정")]
