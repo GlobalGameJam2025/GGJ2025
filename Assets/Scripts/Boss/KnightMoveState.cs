@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class KnightMoveState : IBossState
@@ -9,18 +10,35 @@ public class KnightMoveState : IBossState
     {
         _controller = controller;
     }
+
+    float _elpasTime;
+
     public void Enter()
     {
-        throw new System.NotImplementedException();
+        _controller.animator.SetBool("Idle", false);
     }
 
     public void Exit()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public void Update()
     {
-        throw new System.NotImplementedException();
+        _controller.GoTarget();
+        _elpasTime += Time.deltaTime;
+
+        //if (_controller.GetDistance() < 10)
+        //{
+        //    _elpasTime = 0;
+        //    _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
+        //}
+
+        if(_elpasTime > 5)
+        {
+            _elpasTime = 0;
+            _controller.stateMachine.TransitionTo(_controller.stateMachine.idleState);
+           
+        }
     }
 }
