@@ -265,12 +265,14 @@ public class PlayerController : MonoBehaviour
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
             return;
 
-        //플레이어 이동
+        //마우스 포인터
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _mousePointer.transform.position = new Vector3(worldPos.x, worldPos.y, -1);
+
+        //플레이어 이동 
         transform.Translate(new Vector3(_moveInput.x, _moveInput.y) * _dodgeSpped * Time.deltaTime * 5f);
 
-        //마우스 포지션 
+        //체력바 위치 
         Vector3 worldPosition = transform.position + _offset ;
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
         _uiElement.position = screenPosition;
