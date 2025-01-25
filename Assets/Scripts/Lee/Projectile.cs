@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
                 _isStop = false;
                 _elapsedTime = 0f;
                 gameObject.SetActive(false);
-                _audioSource.Play();
+                //_audioSource.Play();
 
             }
 
