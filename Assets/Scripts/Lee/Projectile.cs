@@ -6,6 +6,10 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField]
     private float _projectileSpeed = 20;
+    [SerializeField]
+    private AudioSource _audioSource;    
+
+
     private float _currentSpeed;
     private Vector3 _direction;
     private bool _isfire;
@@ -41,15 +45,17 @@ public class Projectile : MonoBehaviour
             transform.position += _direction * _currentSpeed * Time.deltaTime;
         }
 
-        if(_isStop)
+        if (_isStop)
         {
             _stopTime += Time.deltaTime;
 
-            if(_stopTime >1)
+            if (_stopTime > 3)
             {
                 _isStop = false;
                 _elapsedTime = 0f;
                 gameObject.SetActive(false);
+                //_audioSource.Play();
+
             }
 
         }

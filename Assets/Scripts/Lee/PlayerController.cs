@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -15,6 +16,20 @@ public class PlayerController : MonoBehaviour
     private Transform _mousePointer;
     [SerializeField]
     private List<GameObject> _staminaBar;
+    [SerializeField]
+    private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip[] _audioClip;
+    [SerializeField]
+    private Image _bubbleImage;
+    [SerializeField]
+    private Image _gunImage;
+    [SerializeField]
+    private Sprite[] _bubbleSprite;
+    [SerializeField]
+    private Sprite[] _gunSprite;
+
+    public GameObject waterDefense;
 
     [Header("회피 설정")]
     [SerializeField]
@@ -25,21 +40,38 @@ public class PlayerController : MonoBehaviour
     [Header("투사체 설정")]
     [SerializeField]
     private List<Projectile> _projectilesList;
+    [SerializeField]
+    private List<Projectile> _waterProjectilesList;
+    [SerializeField]
+    private List<Gun> _gunProjectilesList;
+
     private int _projectileIndex = 0;
+    private int _waterProjectileIndex = 0;
+    private int _gunProjectileIndex = 0;
     private float _dodgeSpped = 1;
     private int _staminaindex = 2;
+    private bool _isGun;
     private Vector3 _offset = new Vector3(0, 1, 0);
     private Vector2 _moveInput;
-    private Vector3 direction;         
+    private Vector3 direction;
+
+    public enum EGunState
+    {
+        Normal,       
+        Water,
+        Fire,
+        Thunder
+      
+    }
+
+    EGunState eGunState = EGunState.Normal;
 
     private void Start()
     {
         //_projectilesList = new List<Projectile>();
         _animator.SetBool("Move_S", true);
         StartCoroutine(RecoverStamina());
-
     }
-
 
 
     public void OnMove(InputValue value)
@@ -159,16 +191,82 @@ public class PlayerController : MonoBehaviour
         {
             direction = (_mousePointer.position - transform.position).normalized;
 
-            _projectilesList[_projectileIndex].Init(direction,transform.position);
-            if(_projectileIndex == _projectilesList.Count-1)
+            if(_isGun)
             {
-                _projectileIndex = 0;   
+                _gunProjectilesList[_gunProjectileIndex].Init(transform.position);
+                if (_gunProjectileIndex == _gunProjectilesList.Count - 1)
+                {
+                    _gunProjectileIndex = 0;
+                }
+                else
+                {
+                    _gunProjectileIndex++;
+
+                }
             }
             else
             {
-                _projectileIndex++;
+                switch (eGunState)
+                {
+                    case EGunState.Normal:
+                        _projectilesList[_projectileIndex].Init(direction, transform.position);
+                        if (_projectileIndex == _projectilesList.Count - 1)
+                        {
+                            _projectileIndex = 0;
+                        }
+                        else
+                        {
+                            _projectileIndex++;
 
+                        }
+                        break;
+
+                    case EGunState.Water:
+                        _waterProjectilesList[_waterProjectileIndex].Init(direction, transform.position);
+                        if (_waterProjectileIndex == _waterProjectilesList.Count - 1)
+                        {
+                            _waterProjectileIndex = 0;
+                        }
+                        else
+                        {
+                            _waterProjectileIndex++;
+
+                        }
+                        break;
+
+
+                }
             }
+        }
+    }
+
+    public void OnKey1(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            _isGun = false;
+            _gunImage.sprite = _gunSprite[0];
+        }
+    }
+
+    public void OnKey2(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            _isGun = true;
+            _gunImage.sprite = _gunSprite[1];
+        }
+    }
+
+
+    public void OnChangeGun(InputValue value)
+    {
+        if (value.isPressed && !_isGun)
+        {
+            eGunState = (EGunState)(((int)eGunState + 1) % System.Enum.GetValues(typeof(EGunState)).Length);
+            _bubbleImage.sprite = _bubbleSprite[(int)eGunState];
+
+            Debug.Log("현재 상태: " + eGunState);
         }
     }
 
@@ -207,7 +305,31 @@ public class PlayerController : MonoBehaviour
 
     public void SetHp(float damage)
     {
-        _uiElement.GetComponent<Image>().fillAmount -= damage;
+        if(waterDefense.activeSelf)
+        {
+            _uiElement.GetComponent<Image>().fillAmount -= damage * 0.2f;
+            waterDefense.SetActive(false);
+        }
+        else
+        {
+            _uiElement.GetComponent<Image>().fillAmount -= damage;
+        }
+
+
+        if (_uiElement.GetComponent<Image>().fillAmount <= 0)
+        {
+            //플레이어 죽음
+            _audioSource.clip = _audioClip[1];
+            _audioSource.Play();
+        }
+        else
+        {
+            //플레이어 히트 
+            _audioSource.clip = _audioClip[0];
+            _audioSource.Play();
+        }
+
+    
     }
 
 
@@ -215,22 +337,23 @@ public class PlayerController : MonoBehaviour
     {
 
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
+        {
+            _audioSource.clip = _audioClip[1];
+            _audioSource.Play();
             return;
+        }
 
-        //플레이어 이동
+        //마우스 포인터
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _mousePointer.transform.position = new Vector3(worldPos.x, worldPos.y, -1);
+
+        //플레이어 이동 
         transform.Translate(new Vector3(_moveInput.x, _moveInput.y) * _dodgeSpped * Time.deltaTime * 5f);
 
-        //마우스 포지션 
+        //체력바 위치 
         Vector3 worldPosition = transform.position + _offset ;
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
         _uiElement.position = screenPosition;
-
-
-
-
-
        
     }
 

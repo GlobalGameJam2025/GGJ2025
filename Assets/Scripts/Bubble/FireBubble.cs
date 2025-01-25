@@ -6,6 +6,12 @@ public class FireBubble : Bubble
 {
     [SerializeField] private GameObject _fire;
     [SerializeField] private Transform _boss;
+
+    protected override void Init()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override void TriggerBubble()
     {
         base.TriggerBubble();
