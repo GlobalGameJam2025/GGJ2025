@@ -44,9 +44,15 @@ public class PlayerController : MonoBehaviour
     private List<Projectile> _waterProjectilesList;
     [SerializeField]
     private List<Gun> _gunProjectilesList;
+    [SerializeField]
+    private List<Projectile> _electricProjectilesList;
+    [SerializeField]
+    private List<Projectile> _fireProjectilesList;
 
     private int _projectileIndex = 0;
     private int _waterProjectileIndex = 0;
+    private int _electricProjectileIndex = 0;
+    private int _fireProjectileIndex = 0;
     private int _gunProjectileIndex = 0;
     private float _dodgeSpped = 1;
     private int _staminaindex = 2;
@@ -60,7 +66,7 @@ public class PlayerController : MonoBehaviour
         Normal,       
         Water,
         Fire,
-        Thunder
+        Electric
       
     }
 
@@ -233,8 +239,31 @@ public class PlayerController : MonoBehaviour
 
                         }
                         break;
+                    case EGunState.Electric:
+                        _electricProjectilesList[_electricProjectileIndex].Init(direction, transform.position);
+                        if (_electricProjectileIndex == _electricProjectilesList.Count - 1)
+                        {
+                            _electricProjectileIndex = 0;
+                        }
+                        else
+                        {
+                            _electricProjectileIndex++;
+
+                        }
+                        break;
+                    case EGunState.Fire:
+                        _fireProjectilesList[_fireProjectileIndex].Init(direction, transform.position);
+                        if (_fireProjectileIndex == _fireProjectilesList.Count - 1)
+                        {
+                            _fireProjectileIndex = 0;
+                        }
+                        else
+                        {
+                            _fireProjectileIndex++;
 
 
+                        }
+                        break;
                 }
             }
         }
@@ -264,7 +293,7 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed && !_isGun)
         {
             eGunState = (EGunState)(((int)eGunState + 1) % System.Enum.GetValues(typeof(EGunState)).Length);
-            _bubbleImage.sprite = _bubbleSprite[(int)eGunState];
+           // _bubbleImage.sprite = _bubbleSprite[(int)eGunState];
 
             Debug.Log("현재 상태: " + eGunState);
         }

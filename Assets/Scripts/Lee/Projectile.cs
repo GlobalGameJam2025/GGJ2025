@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private float _projectileSpeed = 20;
     [SerializeField]
-    private AudioSource _audioSource;    
+    private AudioSource _audioSource;
 
 
     private float _currentSpeed;
@@ -23,9 +23,9 @@ public class Projectile : MonoBehaviour
         _isStop = false;
         _stopTime = 0f;
         _elapsedTime = 0f;
-        this._direction = direction; 
+        this._direction = direction;
         gameObject.SetActive(true);
-        transform.position = InitPos;   
+        transform.position = InitPos;
     }
    
 

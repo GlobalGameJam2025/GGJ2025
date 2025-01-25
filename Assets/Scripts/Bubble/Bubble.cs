@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class Bubble : MonoBehaviour
 {
-    protected int _bombCount = 1;
+    public int bombCount = 1;
     [SerializeField] protected bool _isHead = true;
     public static int count = 0;
     public int priority = 0;
@@ -25,26 +25,14 @@ public abstract class Bubble : MonoBehaviour
 
     private void OnDisable()
     {
-        _bombCount = 1;
+        bombCount = 1;
         gameObject.transform.localScale = Vector3.one;
     }
 
-    private void Merge()
-    {
-        _bombCount++;
-        gameObject.transform.localScale *= 1.2f;
-    }
-
-    protected abstract void Init();
-
     protected virtual void TriggerBubble()
     {
-        if (_bombCount == 5)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-        Merge();
+        bombCount++;
+        gameObject.transform.localScale *= 1.2f;
     }
 
     protected virtual void TriggerPlayer()
@@ -62,11 +50,12 @@ public abstract class Bubble : MonoBehaviour
     {
         if (collision.CompareTag("Bubble"))
         {
-            TriggerBubble();
             if (priority > collision.GetComponent<Bubble>().priority)
             {
                 gameObject.SetActive(false);
             }
+            TriggerBubble();
+            if (bombCount >= 5) gameObject.SetActive(false);
         }
 
         if (collision.CompareTag("Player"))
