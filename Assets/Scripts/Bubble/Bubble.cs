@@ -47,7 +47,7 @@ public abstract class Bubble : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    protected virtual void SetExplosion(bool isExplosion = true)
+    protected virtual void SetExplosion(bool isExplosion = false)
     {
         if (isExplosion) return;
         if (bombCount >= 5) gameObject.SetActive(false);
