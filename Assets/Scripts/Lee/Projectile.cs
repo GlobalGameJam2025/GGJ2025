@@ -41,11 +41,11 @@ public class Projectile : MonoBehaviour
             transform.position += _direction * _currentSpeed * Time.deltaTime;
         }
 
-        if(_isStop)
+        if (_isStop)
         {
             _stopTime += Time.deltaTime;
 
-            if(_stopTime >1)
+            if (_stopTime > 3)
             {
                 _isStop = false;
                 _elapsedTime = 0f;

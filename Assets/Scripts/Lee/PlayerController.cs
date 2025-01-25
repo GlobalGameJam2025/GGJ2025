@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private Transform _mousePointer;
     [SerializeField]
     private List<GameObject> _staminaBar;
+    public GameObject waterDefense;
 
     [Header("회피 설정")]
     [SerializeField]
@@ -25,21 +27,30 @@ public class PlayerController : MonoBehaviour
     [Header("투사체 설정")]
     [SerializeField]
     private List<Projectile> _projectilesList;
+    [SerializeField]
+    private List<Projectile> _waterprojectilesList;
     private int _projectileIndex = 0;
+    private int _waterprojectileIndex = 0;
     private float _dodgeSpped = 1;
     private int _staminaindex = 2;
     private Vector3 _offset = new Vector3(0, 1, 0);
     private Vector2 _moveInput;
-    private Vector3 direction;         
+    private Vector3 direction;
+
+    public enum EGunState
+    {
+        Normal,       
+        Water       
+    }
+
+    EGunState eGunState = EGunState.Normal;
 
     private void Start()
     {
         //_projectilesList = new List<Projectile>();
         _animator.SetBool("Move_S", true);
         StartCoroutine(RecoverStamina());
-
     }
-
 
 
     public void OnMove(InputValue value)
@@ -159,16 +170,45 @@ public class PlayerController : MonoBehaviour
         {
             direction = (_mousePointer.position - transform.position).normalized;
 
-            _projectilesList[_projectileIndex].Init(direction,transform.position);
-            if(_projectileIndex == _projectilesList.Count-1)
+            switch(eGunState)
             {
-                _projectileIndex = 0;   
-            }
-            else
-            {
-                _projectileIndex++;
+                case EGunState.Normal:
+                    _projectilesList[_projectileIndex].Init(direction, transform.position);
+                    if (_projectileIndex == _projectilesList.Count - 1)
+                    {
+                        _projectileIndex = 0;
+                    }
+                    else
+                    {
+                        _projectileIndex++;
 
+                    }
+                    break;
+
+                case EGunState.Water:
+                    _waterprojectilesList[_waterprojectileIndex].Init(direction, transform.position);
+                    if (_waterprojectileIndex == _waterprojectilesList.Count - 1)
+                    {
+                        _waterprojectileIndex = 0;
+                    }
+                    else
+                    {
+                        _waterprojectileIndex++;
+
+                    }
+                    break;
             }
+        }
+    }
+ 
+
+    public void OnChangeGun(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            eGunState = (EGunState)(((int)eGunState + 1) % System.Enum.GetValues(typeof(EGunState)).Length);
+
+            Debug.Log("현재 상태: " + eGunState);
         }
     }
 
@@ -207,7 +247,15 @@ public class PlayerController : MonoBehaviour
 
     public void SetHp(float damage)
     {
-        _uiElement.GetComponent<Image>().fillAmount -= damage;
+        if(waterDefense.activeSelf)
+        {
+            _uiElement.GetComponent<Image>().fillAmount -= damage * 0.2f;
+            waterDefense.SetActive(false);
+        }
+        else
+        {
+            _uiElement.GetComponent<Image>().fillAmount -= damage;
+        }
     }
 
 
@@ -226,11 +274,6 @@ public class PlayerController : MonoBehaviour
         Vector3 worldPosition = transform.position + _offset ;
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
         _uiElement.position = screenPosition;
-
-
-
-
-
        
     }
 
