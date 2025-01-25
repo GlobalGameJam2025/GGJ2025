@@ -6,7 +6,7 @@ public class KnightAttackPattern2SO : BossAttackPatternSO
 {
     [SerializeField] private GameObject _fireBallPrefab;
     private List<GameObject> _fireBalls = new List<GameObject>();
-    private float _attackSpeed = 15f;
+    private float _attackSpeed = 25f;
     private float _attackDelayTime = 0.3f;
 
     public void Init()
