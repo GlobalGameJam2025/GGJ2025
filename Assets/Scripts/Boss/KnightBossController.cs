@@ -13,10 +13,22 @@ public class KnightBossController : MonoBehaviour
         get { return _stateMachine; }
     }
 
+    [SerializeField] private KnightAttackNormalPatternSO _patternNormal;
+    [SerializeField] private KnightAttackPattern1SO _pattern1;
+    [SerializeField] private KnightAttackPattern2SO _pattern2;
+    [SerializeField] private KnightAttackPattern3SO _pattern3;
+    public KnightAttackNormalPatternSO patternNormal => _patternNormal;
+    public KnightAttackPattern1SO pattern1 => _pattern1;
+    public KnightAttackPattern2SO pattern2 => _pattern2;
+    public KnightAttackPattern3SO pattern3 => _pattern3;
+
+    public PolygonCollider2D normalAttackArea;
+
 
     private bool _isRunning = true;
     [SerializeField]
-    private Transform _player;
+    private PlayerController _player;
+    public PlayerController player => _player;
     [SerializeField]
     private NavMeshAgent agent;
     [SerializeField]
@@ -29,17 +41,27 @@ public class KnightBossController : MonoBehaviour
         get { return _animator; }
     }
 
+    public bool onPatternNormal = true;
+    public bool onPattern1 = true;
+    public bool onPattern2 = true;
+    public bool onPattern3 = true;
+
+    [SerializeField] private float patternNormalCoolTime = 0;
+    [SerializeField] private float pattern1CoolTime = 0;
+    [SerializeField] private float pattern2CoolTime = 0;
+    [SerializeField] private float pattern3CoolTime = 0;
+
     void Start()
     {
         _stateMachine = new KnightBossStateMachine(this);
-        _stateMachine.Initialize(_stateMachine.moveState);
+        _stateMachine.Initialize(_stateMachine.idleState);
         agent.updateUpAxis = false; 
         agent.updateRotation = false; 
     }
 
     public void GoTarget()
     {
-        if(_player.position.x < transform.position.x)
+        if(_player.gameObject.transform.position.x < transform.position.x)
         {
             _spriteRenderer.flipX = false;   
         }
@@ -47,12 +69,12 @@ public class KnightBossController : MonoBehaviour
         {
             _spriteRenderer.flipX = true;   
         }
-        agent.SetDestination(_player.position);
+        agent.SetDestination(_player.gameObject.transform.position);
     }
 
     public float GetDistance()
     {
-        return  Vector3.Distance(transform.position, _player.position);
+        return  Vector3.Distance(transform.position, _player.gameObject.transform.position);
     }
 
     public void SetStop(bool isStop)
@@ -70,11 +92,66 @@ public class KnightBossController : MonoBehaviour
 
     void Update()
     {
-        
+        if (!onPatternNormal)
+        {
+            if (patternNormalCoolTime < patternNormal.coolTime)
+            {
+                patternNormalCoolTime += Time.deltaTime;
+            }
+            else
+            {
+                onPatternNormal = true;
+                patternNormalCoolTime = 0;
+            }
+        }
+        if (!onPattern1)
+        {
+            if (pattern1CoolTime < pattern1.coolTime)
+            {
+                pattern1CoolTime += Time.deltaTime;
+            }
+            else
+            {
+                onPattern1 = true;
+                pattern1CoolTime = 0;
+            }
+        }
+        if (!onPattern2)
+        {
+            if (pattern2CoolTime < pattern2.coolTime)
+            {
+                pattern2CoolTime += Time.deltaTime;
+            }
+            else
+            {
+                onPattern2 = true;
+                pattern2CoolTime = 0;
+            }
+        }
+        if (!onPattern3)
+        {
+            if (pattern3CoolTime < pattern3.coolTime)
+            {
+                pattern3CoolTime += Time.deltaTime;
+            }
+            else
+            {
+                onPattern3 = true;
+                pattern3CoolTime = 0;
+            }
+        }
     }
     void FixedUpdate()
     {
         if (!_isRunning) return;
         _stateMachine.Update();
     }
+
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Player"))
+    //    {
+    //        stateMachine.TransitionTo(stateMachine.attackState);
+    //    }
+    //}
 }

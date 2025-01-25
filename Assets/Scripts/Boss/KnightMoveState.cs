@@ -39,7 +39,37 @@ public class KnightMoveState : IBossState
             _elpasTime = 0;
             _controller.SetStop(true);
             _controller.stateMachine.TransitionTo(_controller.stateMachine.idleState);
-           
         }
+
+        float magnitude = (_controller.player.transform.position - _controller.transform.position).magnitude;
+
+        if (magnitude < _controller.pattern3.attackArea)
+        {
+            _controller.onPattern3 = true;
+            _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
+            _controller.StartCoroutine(_controller.pattern3.Attack(_controller.player.gameObject, _controller.gameObject));
+        }
+
+        if (magnitude < _controller.pattern1.attackArea)
+        {
+            _controller.onPattern1 = true;
+            _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
+            _controller.StartCoroutine(_controller.pattern1.Attack(_controller.player.gameObject, _controller.gameObject));
+        }
+
+        if (magnitude < _controller.pattern2.attackArea)
+        {
+            _controller.onPattern1 = true;
+            _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
+            _controller.StartCoroutine(_controller.pattern2.Attack(_controller.player.gameObject, _controller.gameObject));
+        }
+
+        if (magnitude < _controller.patternNormal.attackArea)
+        {
+            _controller.onPatternNormal = true;
+            _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
+            _controller.StartCoroutine(_controller.patternNormal.Attack(_controller.player.gameObject, _controller.gameObject));
+        }
+        
     }
 }

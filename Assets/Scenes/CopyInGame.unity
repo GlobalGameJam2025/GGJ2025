@@ -35790,7 +35790,7 @@ Transform:
   m_GameObject: {fileID: 1545981796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.76, y: 2.21, z: 0}
+  m_LocalPosition: {x: 5.11, y: 1.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35857,10 +35857,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4152609eeb7ffd4fab318e79bccdb63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 938115787}
+  _patternNormal: {fileID: 11400000, guid: 05d97f52ea90daf42938e52fafcace40, type: 2}
+  _pattern1: {fileID: 11400000, guid: dfc86f3562b5f794cb41f81c0b5dd255, type: 2}
+  _pattern2: {fileID: 11400000, guid: de35b28dfaa632b4dbd24ff6c383e251, type: 2}
+  _pattern3: {fileID: 11400000, guid: 1acc6365390c42d4badfbd28f1760a25, type: 2}
+  normalAttackArea: {fileID: 0}
+  _player: {fileID: 938115784}
   agent: {fileID: 1545981803}
   _animator: {fileID: 1545981797}
   _spriteRenderer: {fileID: 1545981798}
+  isPatternNormal: 0
+  isPattern1: 0
+  isPattern2: 0
+  isPattern3: 0
 --- !u!195 &1545981803
 NavMeshAgent:
   m_ObjectHideFlags: 0
