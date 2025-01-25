@@ -23,7 +23,7 @@ public class KnightBossStateMachine
         currentState = startingState;
         startingState.Enter();
     }
-    void TransitionTo(IBossState nextState)
+    public void TransitionTo(IBossState nextState)
     {
         currentState.Exit();
         currentState = nextState;

@@ -9,24 +9,24 @@ public class WaterBubble : Bubble
     [SerializeField]
     private PlayerController _playerController;
 
-    protected override void Init()
-    {
-        throw new System.NotImplementedException();
-    }
-
     protected override void TriggerBubble()
     {
         base.TriggerBubble();
-        if (_bombCount == 5)
+        if (bombCount >= 5)
             _defenseIcon.SetActive(true);
     }
 
     protected override void TriggerPlayer()
     {
         base.TriggerPlayer();
-        if (_bombCount == 5)
+        if (_defenseIcon.activeSelf)
         {
             _playerController.waterDefense.SetActive(true);
+            gameObject.SetActive(false);
         }
+    }
+
+    protected override void SetExplosion(bool isExplosion = true)
+    {
     }
 }

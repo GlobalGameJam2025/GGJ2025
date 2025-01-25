@@ -28,6 +28,10 @@ public class PlayerController : MonoBehaviour
     private Sprite[] _bubbleSprite;
     [SerializeField]
     private Sprite[] _gunSprite;
+    [SerializeField]
+    private GameObject _playerDim;
+    [SerializeField]
+    private Rigidbody2D _rigidbody2D;
 
     public GameObject waterDefense;
 
@@ -43,10 +47,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private List<Projectile> _waterProjectilesList;
     [SerializeField]
+    private List<Projectile> _electricProjectilesList;
+    [SerializeField]
+    private List<Projectile> _fireProjectilesList;
+    [SerializeField]
     private List<Gun> _gunProjectilesList;
 
     private int _projectileIndex = 0;
     private int _waterProjectileIndex = 0;
+    private int _electricProjectileIndex = 0;
+    private int _fireProjectileIndex = 0;
     private int _gunProjectileIndex = 0;
     private float _dodgeSpped = 1;
     private int _staminaindex = 2;
@@ -57,10 +67,10 @@ public class PlayerController : MonoBehaviour
 
     public enum EGunState
     {
-        Normal,       
-        Water,
+        Normal,
+        Electric,
         Fire,
-        Thunder
+        Water
       
     }
 
@@ -158,20 +168,6 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("Move_DS", false);
             _animator.SetBool("Move_S", true);
         }
-
-        //var currentStateInfo = _animator.GetCurrentAnimatorStateInfo(0); // 0은 기본 레이어
-        //int currentStateHash = currentStateInfo.shortNameHash;
-
-        ////현재 상태의 이름 확인
-        //Debug.Log($"Current State Hash: {currentStateHash}");
-
-        //if (currentStateHash == Animator.StringToHash("temp"))
-        //{
-        //    Debug.Log("qweqew");
-        //    _animator.SetBool("Move_W", false);
-        //    _animator.SetBool("Move_D", false);
-        //    _animator.SetBool("Move_DS", false);
-        //}
     }
 
     public void OnDodge(InputValue value)
@@ -233,8 +229,31 @@ public class PlayerController : MonoBehaviour
 
                         }
                         break;
+                    case EGunState.Electric:
+                        _electricProjectilesList[_electricProjectileIndex].Init(direction, transform.position);
+                        if (_electricProjectileIndex == _electricProjectilesList.Count - 1)
+                        {
+                            _electricProjectileIndex = 0;
+                        }
+                        else
+                        {
+                            _electricProjectileIndex++;
+
+                        }
+                        break;
+                    case EGunState.Fire:
+                        _fireProjectilesList[_fireProjectileIndex].Init(direction, transform.position);
+                        if (_fireProjectileIndex == _fireProjectilesList.Count - 1)
+                        {
+                            _fireProjectileIndex = 0;
+                        }
+                        else
+                        {
+                            _fireProjectileIndex++;
 
 
+                        }
+                        break;
                 }
             }
         }
@@ -286,6 +305,14 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public IEnumerator OnPleyerDim()
+    {
+        _playerDim.SetActive(true);
+        yield return new WaitForSeconds(2);
+        _playerDim.SetActive(false);
+
+    }
+
     private IEnumerator RecoverStamina()
     {
 
@@ -301,6 +328,15 @@ public class PlayerController : MonoBehaviour
             }
            
         }
+    }
+
+    public void ApplyKnockback(Vector3 sourcePosition)
+    {
+            // 넉백 방향 계산: 대상에서 현재 오브젝트를 향하는 방향
+            Vector3 direction = (transform.position - sourcePosition).normalized;
+
+            // 넉백 적용
+            _rigidbody2D.AddForce(direction * 5, ForceMode2D.Impulse);
     }
 
     public void SetHp(float damage)
@@ -336,6 +372,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
 
+        if (Input.GetKeyDown(KeyCode.V))
+            ApplyKnockback(new Vector3(20, 20, 1));
+
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
         {
             _audioSource.clip = _audioClip[1];
@@ -357,20 +396,19 @@ public class PlayerController : MonoBehaviour
        
     }
 
-    //void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    Debug.Log($"{other.gameObject.name} has entered the 2D trigger!");
-    //}
-
-    //private void OnTriggerStay2D(Collider2D other)
-    //{
-    //    Debug.Log($"{other.gameObject.name} is staying in the 2D trigger!");
-    //}
-
-    //private void OnTriggerExit2D(Collider2D other)
-    //{
-    //    Debug.Log($"{other.gameObject.name} has exited the 2D trigger!");
-    //}
 
 }
 
+//var currentStateInfo = _animator.GetCurrentAnimatorStateInfo(0); // 0은 기본 레이어
+//int currentStateHash = currentStateInfo.shortNameHash;
+
+////현재 상태의 이름 확인
+//Debug.Log($"Current State Hash: {currentStateHash}");
+
+//if (currentStateHash == Animator.StringToHash("temp"))
+//{
+//    Debug.Log("qweqew");
+//    _animator.SetBool("Move_W", false);
+//    _animator.SetBool("Move_D", false);
+//    _animator.SetBool("Move_DS", false);
+//}

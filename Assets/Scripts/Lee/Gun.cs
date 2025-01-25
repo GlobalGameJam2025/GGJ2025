@@ -31,18 +31,15 @@ public class Gun : MonoBehaviour
             transform.position += direction * _projectileSpeed * Time.deltaTime;
 
             // 탄알이 목표를 바라보도록 회전
-            transform.rotation = Quaternion.LookRotation(direction);
+            //transform.rotation = Quaternion.LookRotation(direction);
 
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
-    
         if (collision.CompareTag("Boss"))
         {
-            //TriggerBoss();
             gameObject.SetActive(false);
         }
         else if (collision.CompareTag("Player"))

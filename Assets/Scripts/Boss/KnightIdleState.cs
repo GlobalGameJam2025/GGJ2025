@@ -9,9 +9,13 @@ public class KnightIdleState : IBossState
     {
         _controller = controller;
     }
+
+    float _elpasTime;
+
     public void Enter()
     {
-
+        Debug.Log("isIdle");
+        _controller.animator.SetBool("Idle", true);
     }
 
     public void Exit()
@@ -21,6 +25,14 @@ public class KnightIdleState : IBossState
 
     public void Update()
     {
+        _elpasTime += Time.deltaTime;
 
+        if (_elpasTime > 3)
+        {
+           
+            _elpasTime = 0;
+            _controller.stateMachine.TransitionTo(_controller.stateMachine.moveState);
+
+        }
     }
 }
