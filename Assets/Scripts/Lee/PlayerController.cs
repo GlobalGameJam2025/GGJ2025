@@ -20,6 +20,15 @@ public class PlayerController : MonoBehaviour
     private AudioSource _audioSource;
     [SerializeField]
     private AudioClip[] _audioClip;
+    [SerializeField]
+    private Image _bubbleImage;
+    [SerializeField]
+    private Image _gunImage;
+    [SerializeField]
+    private Sprite[] _bubbleSprite;
+    [SerializeField]
+    private Sprite[] _gunSprite;
+
     public GameObject waterDefense;
 
     [Header("회피 설정")]
@@ -32,11 +41,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private List<Projectile> _projectilesList;
     [SerializeField]
-    private List<Projectile> _waterprojectilesList;
+    private List<Projectile> _waterProjectilesList;
+    [SerializeField]
+    private List<Gun> _gunProjectilesList;
+
     private int _projectileIndex = 0;
-    private int _waterprojectileIndex = 0;
+    private int _waterProjectileIndex = 0;
+    private int _gunProjectileIndex = 0;
     private float _dodgeSpped = 1;
     private int _staminaindex = 2;
+    private bool _isGun;
     private Vector3 _offset = new Vector3(0, 1, 0);
     private Vector2 _moveInput;
     private Vector3 direction;
@@ -44,7 +58,10 @@ public class PlayerController : MonoBehaviour
     public enum EGunState
     {
         Normal,       
-        Water       
+        Water,
+        Fire,
+        Thunder
+      
     }
 
     EGunState eGunState = EGunState.Normal;
@@ -174,43 +191,80 @@ public class PlayerController : MonoBehaviour
         {
             direction = (_mousePointer.position - transform.position).normalized;
 
-            switch(eGunState)
+            if(_isGun)
             {
-                case EGunState.Normal:
-                    _projectilesList[_projectileIndex].Init(direction, transform.position);
-                    if (_projectileIndex == _projectilesList.Count - 1)
-                    {
-                        _projectileIndex = 0;
-                    }
-                    else
-                    {
-                        _projectileIndex++;
+                _gunProjectilesList[_gunProjectileIndex].Init(transform.position);
+                if (_gunProjectileIndex == _gunProjectilesList.Count - 1)
+                {
+                    _gunProjectileIndex = 0;
+                }
+                else
+                {
+                    _gunProjectileIndex++;
 
-                    }
-                    break;
+                }
+            }
+            else
+            {
+                switch (eGunState)
+                {
+                    case EGunState.Normal:
+                        _projectilesList[_projectileIndex].Init(direction, transform.position);
+                        if (_projectileIndex == _projectilesList.Count - 1)
+                        {
+                            _projectileIndex = 0;
+                        }
+                        else
+                        {
+                            _projectileIndex++;
 
-                case EGunState.Water:
-                    _waterprojectilesList[_waterprojectileIndex].Init(direction, transform.position);
-                    if (_waterprojectileIndex == _waterprojectilesList.Count - 1)
-                    {
-                        _waterprojectileIndex = 0;
-                    }
-                    else
-                    {
-                        _waterprojectileIndex++;
+                        }
+                        break;
 
-                    }
-                    break;
+                    case EGunState.Water:
+                        _waterProjectilesList[_waterProjectileIndex].Init(direction, transform.position);
+                        if (_waterProjectileIndex == _waterProjectilesList.Count - 1)
+                        {
+                            _waterProjectileIndex = 0;
+                        }
+                        else
+                        {
+                            _waterProjectileIndex++;
+
+                        }
+                        break;
+
+
+                }
             }
         }
     }
- 
 
-    public void OnChangeGun(InputValue value)
+    public void OnKey1(InputValue value)
     {
         if (value.isPressed)
         {
+            _isGun = false;
+            _gunImage.sprite = _gunSprite[0];
+        }
+    }
+
+    public void OnKey2(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            _isGun = true;
+            _gunImage.sprite = _gunSprite[1];
+        }
+    }
+
+
+    public void OnChangeGun(InputValue value)
+    {
+        if (value.isPressed && !_isGun)
+        {
             eGunState = (EGunState)(((int)eGunState + 1) % System.Enum.GetValues(typeof(EGunState)).Length);
+            _bubbleImage.sprite = _bubbleSprite[(int)eGunState];
 
             Debug.Log("현재 상태: " + eGunState);
         }
