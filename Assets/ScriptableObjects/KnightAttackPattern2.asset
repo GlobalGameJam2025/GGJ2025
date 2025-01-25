@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _description: 
   _attackDamage: 0
-  coolTime: 0
+  attackArea: 5
+  coolTime: 20
+  _fireBallPrefab: {fileID: 6344292768313209729, guid: ade758d9679a313419c77b23d00f2224, type: 3}

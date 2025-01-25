@@ -41,18 +41,22 @@ public class KnightBossController : MonoBehaviour
         get { return _animator; }
     }
 
-    public bool onPatternNormal = true;
-    public bool onPattern1 = true;
-    public bool onPattern2 = true;
-    public bool onPattern3 = true;
+    public bool onPatternNormal = false;
+    public bool onPattern1 = false;
+    public bool onPattern2 = false;
+    public bool onPattern3 = false;
+
+    public bool onPatternNormalCoolTime = true;
+    public bool onPattern1and2CoolTime = true;
+    public bool onPattern3CoolTime = true;
 
     [SerializeField] private float patternNormalCoolTime = 0;
-    [SerializeField] private float pattern1CoolTime = 0;
-    [SerializeField] private float pattern2CoolTime = 0;
+    [SerializeField] private float pattern1and2CoolTime = 0;
     [SerializeField] private float pattern3CoolTime = 0;
 
     void Start()
     {
+        _pattern2.Init();
         _stateMachine = new KnightBossStateMachine(this);
         _stateMachine.Initialize(_stateMachine.idleState);
         agent.updateUpAxis = false; 
@@ -92,7 +96,7 @@ public class KnightBossController : MonoBehaviour
 
     void Update()
     {
-        if (!onPatternNormal)
+        if (!onPatternNormalCoolTime)
         {
             if (patternNormalCoolTime < patternNormal.coolTime)
             {
@@ -100,35 +104,24 @@ public class KnightBossController : MonoBehaviour
             }
             else
             {
-                onPatternNormal = true;
+                onPatternNormalCoolTime = true;
                 patternNormalCoolTime = 0;
             }
         }
-        if (!onPattern1)
+        if (!onPattern1and2CoolTime)
         {
-            if (pattern1CoolTime < pattern1.coolTime)
+            if (pattern1and2CoolTime < pattern1.coolTime)
             {
-                pattern1CoolTime += Time.deltaTime;
+                pattern1and2CoolTime += Time.deltaTime;
             }
             else
             {
-                onPattern1 = true;
-                pattern1CoolTime = 0;
+                onPattern1and2CoolTime = true;
+                pattern1and2CoolTime = 0;
             }
         }
-        if (!onPattern2)
-        {
-            if (pattern2CoolTime < pattern2.coolTime)
-            {
-                pattern2CoolTime += Time.deltaTime;
-            }
-            else
-            {
-                onPattern2 = true;
-                pattern2CoolTime = 0;
-            }
-        }
-        if (!onPattern3)
+        
+        if (!onPattern3CoolTime)
         {
             if (pattern3CoolTime < pattern3.coolTime)
             {
@@ -136,7 +129,7 @@ public class KnightBossController : MonoBehaviour
             }
             else
             {
-                onPattern3 = true;
+                onPattern3CoolTime = true;
                 pattern3CoolTime = 0;
             }
         }

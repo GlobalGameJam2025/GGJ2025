@@ -7,6 +7,9 @@ public class KnightAttackPattern1SO : BossAttackPatternSO
 {
     public override IEnumerator Attack(GameObject player, GameObject boss)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("АјАн1");
+        KnightBossController bossController = boss.GetComponent<KnightBossController>();
+        yield return new WaitForSeconds(2f);
+        bossController.stateMachine.TransitionTo(bossController.stateMachine.moveState);
     }
 }
