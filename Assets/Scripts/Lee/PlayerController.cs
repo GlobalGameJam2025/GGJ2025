@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     private Transform _mousePointer;
     [SerializeField]
     private List<GameObject> _staminaBar;
+    [SerializeField]
+    private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip[] _audioClip;
     public GameObject waterDefense;
 
     [Header("회피 설정")]
@@ -256,6 +260,22 @@ public class PlayerController : MonoBehaviour
         {
             _uiElement.GetComponent<Image>().fillAmount -= damage;
         }
+
+
+        if (_uiElement.GetComponent<Image>().fillAmount <= 0)
+        {
+            //플레이어 죽음
+            _audioSource.clip = _audioClip[1];
+            _audioSource.Play();
+        }
+        else
+        {
+            //플레이어 히트 
+            _audioSource.clip = _audioClip[0];
+            _audioSource.Play();
+        }
+
+    
     }
 
 
@@ -263,7 +283,11 @@ public class PlayerController : MonoBehaviour
     {
 
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
+        {
+            _audioSource.clip = _audioClip[1];
+            _audioSource.Play();
             return;
+        }
 
         //마우스 포인터
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

@@ -6,6 +6,10 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField]
     private float _projectileSpeed = 20;
+    [SerializeField]
+    private AudioSource _audioSource;    
+
+
     private float _currentSpeed;
     private Vector3 _direction;
     private bool _isfire;
@@ -50,6 +54,8 @@ public class Projectile : MonoBehaviour
                 _isStop = false;
                 _elapsedTime = 0f;
                 gameObject.SetActive(false);
+                _audioSource.Play();
+
             }
 
         }
