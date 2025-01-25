@@ -37,6 +37,7 @@ public class KnightMoveState : IBossState
         if(_elpasTime > 5)
         {
             _elpasTime = 0;
+            _controller.SetStop(true);
             _controller.stateMachine.TransitionTo(_controller.stateMachine.idleState);
            
         }

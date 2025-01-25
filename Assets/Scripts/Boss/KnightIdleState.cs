@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class KnightIdleState : IBossState
 {
@@ -14,7 +15,6 @@ public class KnightIdleState : IBossState
 
     public void Enter()
     {
-        Debug.Log("isIdle");
         _controller.animator.SetBool("Idle", true);
     }
 
@@ -31,6 +31,7 @@ public class KnightIdleState : IBossState
         {
            
             _elpasTime = 0;
+            _controller.SetStop(false);
             _controller.stateMachine.TransitionTo(_controller.stateMachine.moveState);
 
         }

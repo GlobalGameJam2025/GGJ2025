@@ -26,7 +26,9 @@ public class WaterBubble : Bubble
         }
     }
 
-    protected override void SetExplosion(bool isExplosion = true)
+    protected override void SetExplosion(bool isExplosion = false)
     {
+        if (isExplosion) return;
+        if (bombCount >= 5) gameObject.SetActive(false);
     }
 }

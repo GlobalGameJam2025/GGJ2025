@@ -55,6 +55,19 @@ public class KnightBossController : MonoBehaviour
         return  Vector3.Distance(transform.position, _player.position);
     }
 
+    public void SetStop(bool isStop)
+    {
+        if(isStop)
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+        }  
+        else
+        {
+            agent.isStopped = false;
+        }
+    }
+
     void Update()
     {
         
