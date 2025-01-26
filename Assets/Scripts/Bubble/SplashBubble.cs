@@ -10,7 +10,7 @@ public class SplashBubble : MonoBehaviour
         if (collision.CompareTag("Boss"))
         {
             gameObject.SetActive(false);
-            collision.GetComponent<BossHp>().OnDamage(10f);
+            collision.GetComponent<BossHp>().OnDamage(3f);
         }
         if (collision.CompareTag("Wall"))
         {

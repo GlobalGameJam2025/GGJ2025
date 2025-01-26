@@ -183,6 +183,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputValue value)
     {
+        if (_uiElement.GetComponent<Image>().fillAmount <= 0)
+        {
+            return;
+        }
+
         if (value.isPressed )
         {
             direction = (_mousePointer.position - transform.position).normalized;
