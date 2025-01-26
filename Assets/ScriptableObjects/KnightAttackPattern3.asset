@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: KnightAttackPattern3
   m_EditorClassIdentifier: 
   _description: 
-  _attackDamage: 0
-  attackArea: 20
+  _attackDamage: 1
+  attackArea: 5
   coolTime: 15

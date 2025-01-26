@@ -28,11 +28,6 @@ public class KnightMoveState : IBossState
         _controller.GoTarget();
         _elpasTime += Time.deltaTime;
 
-        //if (_controller.GetDistance() < 10)
-        //{
-        //    _elpasTime = 0;
-        //    _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
-        //}
 
         if(_elpasTime > 5)
         {
@@ -42,7 +37,7 @@ public class KnightMoveState : IBossState
         }
 
         float magnitude = (_controller.player.transform.position - _controller.transform.position).magnitude;
-        Debug.Log("플레ㅇ니ㅏ러: "+magnitude);
+        //Debug.Log("플레이어: "+magnitude);
         if (_controller.onPattern3CoolTime && magnitude > _controller.pattern3.attackArea)
         {
             _controller.onPattern3 = true;

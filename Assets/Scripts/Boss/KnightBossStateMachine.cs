@@ -26,7 +26,6 @@ public class KnightBossStateMachine
     }
     public void TransitionTo(IBossState nextState)
     {
-        Debug.LogError("nextState: "+ nextState.ToString());
         currentState.Exit();
         currentState = nextState;
         currentState.Enter();

@@ -5,17 +5,20 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: a735f8c23d1ab75449433ac5a83aa8b2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/InGame.unity
     guid: 560cabcd1acd2ae4d8cf3d8cdb736a27
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Loading.unity
     guid: 96e121a22132f364aa82353f027ec9cc
+  - enabled: 1
+    path: Assets/Scenes/CopyInGame.unity
+    guid: 7174989333031b74f905b9386b034648
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: f6fe903cd10530a4caab4ced72b0354f, type: 3}

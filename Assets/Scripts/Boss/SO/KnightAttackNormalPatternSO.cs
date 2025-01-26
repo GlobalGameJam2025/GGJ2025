@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Boss/KnightAttackNormalPatternSO", fileName = "KnightAttackNormalPattern")]
 public class KnightAttackNormalPatternSO : BossAttackPatternSO
 {
+
     public override IEnumerator Attack(GameObject player, GameObject boss)
     {
         float magnitude = (player.transform.position - boss.transform.position).magnitude;

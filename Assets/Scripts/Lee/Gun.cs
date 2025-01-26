@@ -40,6 +40,7 @@ public class Gun : MonoBehaviour
     {
         if (collision.CompareTag("Boss"))
         {
+           collision.GetComponent<BossHp>().OnDamage(0.3f);
             gameObject.SetActive(false);
         }
         else if (collision.CompareTag("Player"))

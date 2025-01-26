@@ -23,7 +23,9 @@ public class KnightBossController : MonoBehaviour
     public KnightAttackPattern3SO pattern3 => _pattern3;
 
     public PolygonCollider2D normalAttackArea;
-
+    public GameObject[] scullBooms;
+    public Transform[] scullBoomLocate;
+    public Transform[] bossTransform;
 
     private bool _isRunning = true;
     [SerializeField]
