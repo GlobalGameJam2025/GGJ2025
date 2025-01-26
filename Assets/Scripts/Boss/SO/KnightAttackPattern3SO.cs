@@ -39,7 +39,7 @@ public class KnightAttackPattern3SO : BossAttackPatternSO
         Debug.Log("기본 공격");
        
 
-        yield return new WaitForSeconds(.7f);
+        yield return new WaitForSeconds(1f);
 
         if (magnitude <= attackArea)
         {

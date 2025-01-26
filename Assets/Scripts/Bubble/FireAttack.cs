@@ -37,7 +37,7 @@ public class FireAttack : MonoBehaviour
         int time = 0;
         while (time >= 3)
         {
-            collision.GetComponent<BossHp>().OnDamage(0.75f);  // 1초에 1씩 데미지
+            collision.GetComponent<BossHp>().OnDamage(1);  // 1초에 1씩 데미지
             time += 1;
             yield return new WaitForSeconds(0.5f);  // 1초 대기
         }
