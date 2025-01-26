@@ -47,7 +47,7 @@ public class KnightMoveState : IBossState
 
         if (_controller.onPattern1and2CoolTime && magnitude < _controller.pattern1.attackArea)
         {
-            if (Random.value < 0f)
+            if (Random.value < 0.5f)
             {
                 _controller.onPattern1 = true;
                 _controller.stateMachine.TransitionTo(_controller.stateMachine.attackState);
