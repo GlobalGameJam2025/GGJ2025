@@ -360,6 +360,7 @@ public class PlayerController : MonoBehaviour
         if (_uiElement.GetComponent<Image>().fillAmount <= 0)
         {
             //플레이어 죽음
+            SceneLoader.instance.LoadScene("GameOver");
             _audioSource.clip = _audioClip[1];
             _audioSource.Play();
         }

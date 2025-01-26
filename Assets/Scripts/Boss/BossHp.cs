@@ -12,14 +12,15 @@ public class BossHp : MonoBehaviour
 
     public void OnDamage(float damage)
     {
-        if (_hp > 0)
+        _hp -= damage;
+        if (_hp >= 0f)
         {
-            _hp -= damage;
             _uiHPElement.GetComponent<Image>().fillAmount = _hp/100;    
         }
         else
         {
             gameObject.SetActive(false);
+            SceneLoader.instance.LoadScene("GameClear");
         }
     }
 

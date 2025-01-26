@@ -35,12 +35,12 @@ public class FireAttack : MonoBehaviour
     private IEnumerator DealDamageOverTime(Collider2D collision)
     {
         int time = 0;
-        while (time >= 3)
+        while (true)
         {
-            collision.GetComponent<BossHp>().OnDamage(1);  // 1초에 1씩 데미지
+            collision.GetComponent<BossHp>().OnDamage(0.2f);  // 1초에 1씩 데미지
             time += 1;
             yield return new WaitForSeconds(0.5f);  // 1초 대기
         }
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 }

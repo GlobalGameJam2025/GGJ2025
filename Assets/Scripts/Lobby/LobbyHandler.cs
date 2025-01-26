@@ -10,7 +10,7 @@ public class LobbyHandler : MonoBehaviour
     [SerializeField] private Button _newStartBtn;
     [SerializeField] private Button _closeBtn;
 
-    [SerializeField] private string _gameSceneName;
+    [SerializeField] private string _gameSceneName = "";
 
     private void Start()
     {
