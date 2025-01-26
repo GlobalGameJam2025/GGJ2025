@@ -22,6 +22,7 @@ public class WaterBubble : Bubble
         if (_defenseIcon.activeSelf)
         {
             _playerController.waterDefense.SetActive(true);
+            _defenseIcon.SetActive(false);
             gameObject.SetActive(false);
         }
     }

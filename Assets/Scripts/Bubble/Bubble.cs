@@ -49,7 +49,7 @@ public abstract class Bubble : MonoBehaviour
 
     protected virtual void SetExplosion(bool isExplosion = true)
     {
-        if (isExplosion) return;
+        if (!isExplosion) return;
         if (bombCount >= 5) gameObject.SetActive(false);
     }
 
@@ -62,7 +62,7 @@ public abstract class Bubble : MonoBehaviour
                 gameObject.SetActive(false);
             }
             TriggerBubble();
-            SetExplosion();
+            SetExplosion(true);
             
         }
 
@@ -74,6 +74,11 @@ public abstract class Bubble : MonoBehaviour
         if (collision.CompareTag("Boss"))
         {
             TriggerBoss();
+        }
+
+        if (collision.CompareTag("Wall"))
+        {
+            gameObject.SetActive(false);
         }
     }
 }
